@@ -174,7 +174,7 @@
             <div id="plan-details" class="p-6 mt-6 rounded-lg bg-gray-50">
                 <h3 class="font-bold text-lg mb-2" id="plan-details-title">Live2Dモデリング　プレミアム</h3>
                 <div class="text-sm text-gray-600 space-y-1">
-                    <p><span class="font-bold">料金：</span><span id="plan-details-price">280,000円（税抜き）/ 308,000（税込み） ~</span></p>
+                    <p><span class="font-bold">料金：</span><span id="plan-details-price">260,000円（税抜き）/ 286,000円（税込み） ~</span></p>
                     <p><span class="font-bold">制作日数：</span><span id="plan-details-days">20 ~ 40日</span></p>
                     <p><span class="font-bold">内容：</span><span id="plan-details-content">全身<br>※パーツ数で変動します。</span></p>
                 </div>
@@ -235,7 +235,7 @@
 
             <div class="price-row mt-4">
                 <span class="price-label">基本料金</span>
-                <span class="price-value" id="base-price">280,000円</span>
+                <span class="price-value" id="base-price">260,000円</span>
             </div>
             <div class="price-row">
                 <span class="price-label">追加オプション合計</span>
@@ -243,15 +243,15 @@
             </div>
             <div class="price-row">
                 <span class="price-label">小計（税抜）</span>
-                <span class="price-value" id="sub-total">280,000円</span>
+                <span class="price-value" id="sub-total">260,000円</span>
             </div>
             <div class="price-row">
                 <span class="price-label">消費税（10%）</span>
-                <span class="price-value" id="tax-amount">28,000円</span>
+                <span class="price-value" id="tax-amount">26,000円</span>
             </div>
             <div class="price-row total-price mt-4">
                 <span class="price-label font-bold">合計金額（税込）</span>
-                <span class="price-value" id="grand-total">308,000円</span>
+                <span class="price-value" id="grand-total">286,000円</span>
             </div>
         </div>
         
@@ -270,7 +270,7 @@
             const planData = {
                 'premium-280k': {
                     name: 'Live2Dモデリング　プレミアム',
-                    price: 280000,
+                    price: 260000,
                     days: '20 ~ 40日',
                     content: '頭部XYZ、体XYZ、髪の毛、胸、基本衣装<br>表情差分　喜怒哀楽<br>※喜びはアクティブで動作します。',
                     optionsEnabled: true,
@@ -278,19 +278,19 @@
                 },
                 'mama-plan': {
                     name: 'Live2Dモデリング　天倉ママプラン',
-                    price: 0,
+                    price: 400000,
                     days: '50日～100日',
                     content: 'キャラクターデザイン + Live2Dモデリング　プレミアム<br>※パーツ数で変動します。',
-                    optionsEnabled: false,
-                    isCustom: true,
+                    optionsEnabled: true,
+                    isCustom: false,
                 },
                  'stills': {
                     name: 'スチルイラスト　イラスト+Live2Dモデリング',
-                    price: 0,
+                    price: 160000,
                     days: '20~40日',
                     content: 'キャラクター、簡易背景<br>※パーツ数で変動します。',
-                    optionsEnabled: false,
-                    isCustom: true,
+                    optionsEnabled: true,
+                    isCustom: false,
                 }
             };
             
@@ -453,3 +453,4 @@
     </script>
 </body>
 </html>
+```
