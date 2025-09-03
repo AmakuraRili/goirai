@@ -1,1 +1,455 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ご依頼フォーム　簡易見積ページ</title>
+    <meta name="robots" content="noindex">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background-color: #F8F8F8;
+            padding: 2.5rem;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        .card {
+            background-color: #FFFFFF;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 1.5rem;
+        }
+        .input-group label {
+            font-weight: 500;
+            color: #4A4A4A;
+            margin-bottom: 0.5rem;
+        }
+        .input-group input,
+        .input-group textarea,
+        .input-group select {
+            border-radius: 8px;
+            border: 1px solid #D1D5DB;
+            padding: 0.75rem 1rem;
+            transition: all 0.2s ease-in-out;
+        }
+        .input-group input:focus,
+        .input-group textarea:focus,
+        .input-group select:focus {
+            outline: none;
+            border-color: #3B82F6;
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5);
+        }
+        .input-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        .section-header {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #1F2937;
+            border-bottom: 2px solid #E5E7EB;
+            padding-bottom: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(1, 1fr);
+            gap: 1.5rem;
+        }
+        @media (min-width: 768px) {
+            .grid-2 {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        .checkbox-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+        }
+        .checkbox-item input {
+            width: 20px;
+            height: 20px;
+        }
+        .info-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid #E5E7EB;
+        }
+        .info-item:last-child {
+            border-bottom: none;
+        }
+        .info-label {
+            font-weight: 500;
+            color: #4A4A4A;
+        }
+        .info-value {
+            color: #1F2937;
+            font-weight: 500;
+            text-align: right;
+        }
+        .price-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 0;
+        }
+        .price-label {
+            font-weight: 500;
+            color: #4A4A4A;
+        }
+        .price-value {
+            font-weight: 700;
+            color: #1F2937;
+            text-align: right;
+        }
+        .total-price .price-value {
+            font-size: 1.5rem;
+            color: #000;
+        }
+        .plan-button {
+            background-color: #F3F4F6;
+            color: #4B5563;
+            font-weight: 600;
+            padding: 0.75rem 1.5rem;
+            border-radius: 9999px;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+            border: 2px solid transparent;
+        }
+        .plan-button.active {
+            background-color: #DBEAFE;
+            color: #1E40AF;
+            border-color: #3B82F6;
+        }
+        .plan-button:hover {
+            background-color: #E5E7EB;
+        }
 
+        .toast-container {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 50;
+            transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+            opacity: 0;
+            visibility: hidden;
+        }
+        .toast-container.show {
+            opacity: 1;
+            visibility: visible;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1 class="text-4xl font-bold text-center text-gray-800 mb-8">ご依頼フォーム　簡易見積ページ</h1>
+        <p class="text-center text-sm text-gray-500 mb-8">お見積もり・仕様書をまとめて作成できます。</p>
+        
+        <div class="card mb-8">
+            <h2 class="section-header">プラン選択</h2>
+            <div class="flex flex-wrap gap-4 justify-center mb-4">
+                <button class="plan-button active" data-plan="premium-280k">Live2Dモデリング　プレミアム</button>
+                <button class="plan-button" data-plan="mama-plan">天倉ママプラン</button>
+                <button class="plan-button" data-plan="stills">スチルイラスト</button>
+            </div>
+            <div id="plan-details" class="p-6 mt-6 rounded-lg bg-gray-50">
+                <h3 class="font-bold text-lg mb-2" id="plan-details-title">Live2Dモデリング　プレミアム</h3>
+                <div class="text-sm text-gray-600 space-y-1">
+                    <p><span class="font-bold">料金：</span><span id="plan-details-price">280,000円（税抜き）/ 308,000（税込み） ~</span></p>
+                    <p><span class="font-bold">制作日数：</span><span id="plan-details-days">20 ~ 40日</span></p>
+                    <p><span class="font-bold">内容：</span><span id="plan-details-content">全身<br>※パーツ数で変動します。</span></p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <h2 class="section-header">1. 依頼内容</h2>
+            
+            <h3 class="font-bold text-gray-800 mb-4 mt-6">モデリング詳細</h3>
+            <div class="input-group">
+                <label for="modelDescription">モデル全体のイメージ</label>
+                <textarea id="modelDescription" placeholder="例: クールな表情が多め、髪の毛はふわっとした動きが欲しいなど"></textarea>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2 class="section-header">2. お見積もり</h2>
+
+            <div>
+                <h3 class="font-bold text-gray-800 mb-4">モデリング一式</h3>
+                <div class="input-group">
+                    <label>基本料金に含まれるモデリング内容</label>
+                    <ul class="text-gray-600 mt-1 space-y-1" id="plan-content-list">
+                        <li>全身</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="mt-8">
+                <h3 class="font-bold text-gray-800 mb-4">追加オプション</h3>
+                <div id="option-inputs-container">
+                    <div class="flex flex-col md:flex-row md:space-x-8">
+                        <div class="input-group flex-1">
+                            <label id="exp-label" for="exp-count">表情差分</label>
+                            <input type="number" id="exp-count" value="0" min="0">
+                        </div>
+                        <div class="input-group flex-1">
+                            <label id="hair-label" for="hair-count">髪型差分</label>
+                            <input type="number" id="hair-count" value="0" min="0">
+                        </div>
+                        <div class="input-group flex-1">
+                            <label id="arm-label" for="arm-count">腕差分</label>
+                            <input type="number" id="arm-count" value="0" min="0">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="input-group mt-6">
+                <label for="additional-notes">その他追加オプション内容</label>
+                <textarea id="additional-notes" placeholder="例：特殊モーション、小物など"></textarea>
+            </div>
+            
+            <div class="input-group mt-6">
+                <label for="notes-other">その他、ご質問やご要望</label>
+                <textarea id="notes-other" placeholder="例: 〇〇さんのようなタッチが好き、納品後のサポート体制について知りたいなど"></textarea>
+            </div>
+
+            <div class="price-row mt-4">
+                <span class="price-label">基本料金</span>
+                <span class="price-value" id="base-price">280,000円</span>
+            </div>
+            <div class="price-row">
+                <span class="price-label">追加オプション合計</span>
+                <span class="price-value text-red-500" id="option-total">0円</span>
+            </div>
+            <div class="price-row">
+                <span class="price-label">小計（税抜）</span>
+                <span class="price-value" id="sub-total">280,000円</span>
+            </div>
+            <div class="price-row">
+                <span class="price-label">消費税（10%）</span>
+                <span class="price-value" id="tax-amount">28,000円</span>
+            </div>
+            <div class="price-row total-price mt-4">
+                <span class="price-label font-bold">合計金額（税込）</span>
+                <span class="price-value" id="grand-total">308,000円</span>
+            </div>
+        </div>
+        
+        <div class="flex justify-center mt-8 space-x-4">
+            <button id="copy-text-btn" class="bg-blue-600 text-white font-bold py-3 px-6 rounded-lg shadow-md hover:bg-blue-700 transition-colors">テキストをコピー</button>
+        </div>
+    </div>
+    
+    <!-- トースト通知 -->
+    <div id="toast" class="toast-container p-4 rounded-lg bg-gray-800 text-white text-sm shadow-lg">
+        コピーされました！
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const planData = {
+                'premium-280k': {
+                    name: 'Live2Dモデリング　プレミアム',
+                    price: 280000,
+                    days: '20 ~ 40日',
+                    content: '頭部XYZ、体XYZ、髪の毛、胸、基本衣装<br>表情差分　喜怒哀楽<br>※喜びはアクティブで動作します。',
+                    optionsEnabled: true,
+                    isCustom: false,
+                },
+                'mama-plan': {
+                    name: 'Live2Dモデリング　天倉ママプラン',
+                    price: 0,
+                    days: '50日～100日',
+                    content: 'キャラクターデザイン + Live2Dモデリング　プレミアム<br>※パーツ数で変動します。',
+                    optionsEnabled: false,
+                    isCustom: true,
+                },
+                 'stills': {
+                    name: 'スチルイラスト　イラスト+Live2Dモデリング',
+                    price: 0,
+                    days: '20~40日',
+                    content: 'キャラクター、簡易背景<br>※パーツ数で変動します。',
+                    optionsEnabled: false,
+                    isCustom: true,
+                }
+            };
+            
+            const optionPrices = {
+                expression: 2000,
+                hair: 30000,
+                arm: 5000
+            };
+            const taxRate = 0.10;
+
+            const planButtons = document.querySelectorAll('.plan-button');
+            const expCountInput = document.getElementById('exp-count');
+            const hairCountInput = document.getElementById('hair-count');
+            const armCountInput = document.getElementById('arm-count');
+            
+            const basePriceEl = document.getElementById('base-price');
+            const optionTotalEl = document.getElementById('option-total');
+            const subTotalEl = document.getElementById('sub-total');
+            const taxAmountEl = document.getElementById('tax-amount');
+            const grandTotalEl = document.getElementById('grand-total');
+            
+            const planDetailsTitleEl = document.getElementById('plan-details-title');
+            const planDetailsPriceEl = document.getElementById('plan-details-price');
+            const planDetailsDaysEl = document.getElementById('plan-details-days');
+            const planDetailsContentEl = document.getElementById('plan-details-content');
+
+            const planContentListEl = document.getElementById('plan-content-list');
+            const optionInputsContainer = document.getElementById('option-inputs-container');
+
+            const copyTextBtn = document.getElementById('copy-text-btn');
+            const toastElement = document.getElementById('toast');
+            
+            function updateOptionLabels() {
+                document.getElementById('exp-label').textContent = `表情差分 (${optionPrices.expression.toLocaleString()}円)`;
+                document.getElementById('hair-label').textContent = `髪型差分 (${optionPrices.hair.toLocaleString()}円~)`;
+                document.getElementById('arm-label').textContent = `腕差分 (${optionPrices.arm.toLocaleString()}円)`;
+            }
+
+            function updatePlan(planKey) {
+                const plan = planData[planKey];
+                
+                planDetailsTitleEl.textContent = plan.name;
+                planDetailsPriceEl.textContent = plan.isCustom ? 'ご相談をお願いします。' : `${plan.price.toLocaleString()}円（税抜き）/ ${(Math.floor(plan.price * (1 + taxRate))).toLocaleString()}円（税込み） ~`;
+                planDetailsDaysEl.textContent = plan.days;
+                planDetailsContentEl.innerHTML = plan.content;
+                
+                planContentListEl.innerHTML = `<li>${plan.content.replace(/<br>/g, '</li><li>')}</li>`;
+
+                if (plan.optionsEnabled) {
+                    optionInputsContainer.style.display = 'block';
+                    calculateTotals();
+                } else {
+                    optionInputsContainer.style.display = 'none';
+                    basePriceEl.textContent = plan.isCustom ? 'ご相談' : `${plan.price.toLocaleString()}円`;
+                    optionTotalEl.textContent = '0円';
+                    subTotalEl.textContent = '0円';
+                    taxAmountEl.textContent = '0円';
+                    grandTotalEl.textContent = 'ご相談';
+                }
+            }
+
+            function calculateTotals() {
+                const currentPlan = document.querySelector('.plan-button.active').dataset.plan;
+                const plan = planData[currentPlan];
+                if (!plan.optionsEnabled) return;
+
+                const expTotal = parseInt(expCountInput.value) * optionPrices.expression;
+                const hairTotal = parseInt(hairCountInput.value) * optionPrices.hair;
+                const armTotal = parseInt(armCountInput.value) * optionPrices.arm;
+                
+                const totalOptions = expTotal + hairTotal + armTotal;
+                const subTotal = plan.price + totalOptions;
+                const taxAmount = Math.floor(subTotal * taxRate);
+                const grandTotal = subTotal + taxAmount;
+                
+                basePriceEl.textContent = `${plan.price.toLocaleString()}円`;
+                optionTotalEl.textContent = `${totalOptions.toLocaleString()}円`;
+                subTotalEl.textContent = `${subTotal.toLocaleString()}円`;
+                taxAmountEl.textContent = `${taxAmount.toLocaleString()}円`;
+                grandTotalEl.textContent = `${grandTotal.toLocaleString()}円`;
+            }
+            
+            function generateTextContent() {
+                const currentPlanKey = document.querySelector('.plan-button.active').dataset.plan;
+                const currentPlan = planData[currentPlanKey];
+                
+                const lines = [
+                    'ご依頼フォーム　簡易見積ページ',
+                    '--------------------------',
+                    '',
+                    '■ 依頼内容',
+                    `ご契約プラン: ${currentPlan.name}`,
+                    `モデル全体のイメージ: ${document.getElementById('modelDescription').value}`,
+                    '',
+                    '■ お見積もり',
+                    '【モデリング一式】',
+                    `基本料金に含まれるモデリング内容: ${currentPlan.content.replace(/<br>/g, '')}`,
+                    '【追加オプション】',
+                    `表情差分数: ${expCountInput.value}`,
+                    `髪型差分数: ${hairCountInput.value}`,
+                    `腕差分数: ${armCountInput.value}`,
+                    `その他追加オプション内容: ${document.getElementById('additional-notes').value}`,
+                    `その他、ご質問やご要望: ${document.getElementById('notes-other').value}`,
+                    '',
+                    '■ 料金',
+                    `基本料金: ${basePriceEl.textContent}`,
+                    `追加オプション合計: ${optionTotalEl.textContent}`,
+                    `小計（税抜）: ${subTotalEl.textContent}`,
+                    `消費税（10%）: ${taxAmountEl.textContent}`,
+                    `合計金額（税込）: ${grandTotalEl.textContent}`,
+                ];
+                return lines.join('\n');
+            }
+
+            function showToast() {
+                toastElement.classList.add('show');
+                setTimeout(() => {
+                    toastElement.classList.remove('show');
+                }, 2000);
+            }
+
+            function copyToClipboard(text) {
+                const textarea = document.createElement('textarea');
+                textarea.value = text;
+                document.body.appendChild(textarea);
+                textarea.select();
+                try {
+                    document.execCommand('copy');
+                    showToast();
+                } catch (err) {
+                    console.error('コピーに失敗しました', err);
+                    alert('コピーに失敗しました。');
+                }
+                document.body.removeChild(textarea);
+            }
+
+            planButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    planButtons.forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+                    updatePlan(button.dataset.plan);
+                    calculateTotals();
+                });
+            });
+
+            expCountInput.addEventListener('input', calculateTotals);
+            hairCountInput.addEventListener('input', calculateTotals);
+            armCountInput.addEventListener('input', calculateTotals);
+            
+            copyTextBtn.addEventListener('click', () => {
+                calculateTotals();
+                copyToClipboard(generateTextContent());
+            });
+
+            // 初期設定
+            updatePlan('premium-280k');
+            calculateTotals();
+            updateOptionLabels();
+        });
+    </script>
+</body>
+</html>
